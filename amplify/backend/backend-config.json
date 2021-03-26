@@ -24,5 +24,11 @@
         }
       }
     }
+  },
+  "storage": {
+    "hamplifystorage": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
+    }
   }
 }
