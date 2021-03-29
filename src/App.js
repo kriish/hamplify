@@ -2,18 +2,29 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { API, Storage } from 'aws-amplify';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
-import { listNotes } from './graphql/queries';
+import { listNotes, listWasteBinTypes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
 
 const initialFormState = { name: '', description: '' }
 
 function App() {
   const [notes, setNotes] = useState([]);
+  const [wastebins, setWastebins] = useState([]);
   const [formData, setFormData] = useState(initialFormState);
 
   useEffect(() => {
     fetchNotes();
+    fetchWastebins();
   }, []);
+
+  async function fetchWastebins() {
+    const apiData = await API.graphql({ query: listWasteBinTypes });
+    const wastebinsFromAPI = apiData.data.listWasteBinTypes.items;
+    await Promise.all(wastebinsFromAPI.map(async bin => {
+      return bin;
+    }))
+    setWastebins(apiData.data.listWasteBinTypes.items);
+  }
 
   async function fetchNotes() {
     const apiData = await API.graphql({ query: listNotes });
@@ -55,6 +66,21 @@ function App() {
 
   return (
     <div className="App">
+      <h1>My Octank Waste Service</h1>
+      
+      <h2>My Bins</h2>
+      <div style={{marginBottom: 30}}>
+        {
+          wastebins.map(bin => (
+            <div key={bin.id}>
+              <h2>{bin.location}</h2>
+              <p>{bin.fillPercentage}</p>
+            </div>
+          ))
+        }
+      </div>
+      
+
       <h1>My Notes App</h1>
       <input
         onChange={e => setFormData({ ...formData, 'name': e.target.value})}
