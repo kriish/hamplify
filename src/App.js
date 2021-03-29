@@ -16,8 +16,7 @@ function App() {
     fetchNotes();
     //fetchWastebins();
   }, []);
-
-  /*
+/*
   async function fetchWastebins() {
     const apiData = await API.graphql({ query: listWasteBinTypes });
     const wastebinsFromAPI = apiData.data.listWasteBinTypes.items;
@@ -26,7 +25,7 @@ function App() {
     }))
     setWastebins(apiData.data.listWasteBinTypes.items);
   }
-  */
+*/
   async function fetchNotes() {
     const apiData = await API.graphql({ query: listNotes });
     const notesFromAPI = apiData.data.listNotes.items;
@@ -74,9 +73,16 @@ function App() {
       
       <div style={{marginBottom: 30}}>
         <h3>here is bin</h3>
-        <p>87%</p>
+        <p>88%</p>
+        {
+          wastebins.map(bin => (
+            <div key={bin.id}>
+              <h3>DYNAMIC BIN: {bin.id}</h3>
+              <p>87%</p>
+            </div>
+          ))
+        }
       </div>
-      
 
       <h1>My Notes App</h1>
       <input
