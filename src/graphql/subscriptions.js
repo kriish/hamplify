@@ -1,6 +1,42 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateWastebin = /* GraphQL */ `
+  subscription OnCreateWastebin {
+    onCreateWastebin {
+      id
+      name
+      capacity
+      fillPercentage
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateWastebin = /* GraphQL */ `
+  subscription OnUpdateWastebin {
+    onUpdateWastebin {
+      id
+      name
+      capacity
+      fillPercentage
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteWastebin = /* GraphQL */ `
+  subscription OnDeleteWastebin {
+    onDeleteWastebin {
+      id
+      name
+      capacity
+      fillPercentage
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateNote = /* GraphQL */ `
   subscription OnCreateNote {
     onCreateNote {

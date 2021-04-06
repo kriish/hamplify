@@ -1,6 +1,14 @@
-type Note @model {
+type Wastebin @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  capacity: Int
+  fillPercentage: Float
+}
+
+type Note @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   description: String
   image: String
 }
+  

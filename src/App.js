@@ -2,30 +2,41 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { API, Storage } from 'aws-amplify';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
-import { listNotes, listWasteBinTypes } from './graphql/queries';
+import { listNotes, listWastebins } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
+import { createWastebin as createWastebinMutation } from './graphql/mutations';
+// Amplify Datastore vs graphql
 
 const initialFormState = { name: '', description: '' }
+const initialBinFormState = { name: '', capacity: 0, fillPercentage: 0 }
 
 function App() {
   const [notes, setNotes] = useState([]);
   const [wastebins, setWastebins] = useState([]);
   const [formData, setFormData] = useState(initialFormState);
+  const [binformData, setBinFormData] = useState(initialBinFormState);
 
   useEffect(() => {
     fetchNotes();
-    //fetchWastebins();
+    fetchWastebins();
   }, []);
-/*
+
   async function fetchWastebins() {
-    const apiData = await API.graphql({ query: listWasteBinTypes });
-    const wastebinsFromAPI = apiData.data.listWasteBinTypes.items;
+    const apiData = await API.graphql({ query: listWastebins });
+    const wastebinsFromAPI = apiData.data.listWastebins.items;
     await Promise.all(wastebinsFromAPI.map(async bin => {
       return bin;
     }))
-    setWastebins(apiData.data.listWasteBinTypes.items);
+    setWastebins(apiData.data.listWastebins.items);
   }
-*/
+
+  async function createBin() {
+    if (!binformData.name || !binformData.capacity || !binformData.fillPercentage) return;
+    await API.graphql({ query: createWastebinMutation, variables: { input: binformData } });
+    setWastebins([ ...wastebins, binformData ]);
+    setBinFormData(initialBinFormState);
+  }
+
   async function fetchNotes() {
     const apiData = await API.graphql({ query: listNotes });
     const notesFromAPI = apiData.data.listNotes.items;
@@ -69,7 +80,28 @@ function App() {
       <h1>My Octank Waste Service</h1>
       
       <h2>My Bins</h2>
-      <p>TODO</p>
+      <p>
+      <h1>ADD BINS</h1>
+
+      <input
+        onChange={e => setBinFormData({ ...binformData, 'name': e.target.value})}
+        placeholder="Bin name"
+        value={binformData.name}
+      />
+      <input
+        onChange={e => setBinFormData({ ...binformData, 'capacity': e.target.value})}
+        placeholder="Bin capacity"
+        value={binformData.capacity}
+      />
+      <input
+        onChange={e => setBinFormData({ ...binformData, 'fillPercentage': e.target.value})}
+        placeholder="Bin fillPercentage"
+        value={binformData.fillPercentage}
+      />
+
+      <button onClick={createBin}>Create Bin</button>
+
+      </p>
       
       <div style={{marginBottom: 30}}>
         <h3>here is bin</h3>
@@ -78,7 +110,9 @@ function App() {
           wastebins.map(bin => (
             <div key={bin.id}>
               <h3>DYNAMIC BIN: {bin.id}</h3>
-              <p>87%</p>
+              <p>Bin name: {bin.name}</p>
+              <p>Capacity: {bin.capacity}</p>
+              <p>Fill Percentage: {bin.fillPercentage}%</p>
             </div>
           ))
         }
