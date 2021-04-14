@@ -41,3 +41,8 @@
 img.binImage {
   width: 100px;
 }
+
+.tabHeader {
+  font-size: larger;
+  font-weight: bolder;
+}

@@ -50,22 +50,22 @@ function App() {
       position: "relative",
       padding: "100px 0 0 0"
     }}>
+      <TopBar/>
       <div class="section">
-       <TopBar/>
       
       <div class="container" style={{marginBottom: 30}}>
-        <div class="block"><h1 class="is-primary">My bin status</h1></div>
+        <div class="block"><h1 class="is-primary tabHeader">My bin status</h1></div>
         <div class="block">
         <div class="columns">
         {
           wastebins.map(bin => (
-            <div class="column box" key={bin.id}>
+            <div class="column box" key={bin.id || 'NOID'}>
               <img class="binImage" src="Delete-Bin-Trash-Transparent.png" height="100" />
-              <p>{bin.name}</p>
-              <p>Capacity: {bin.capacity} liters</p>
-              <p>Fill Percentage: {bin.fillPercentage}%</p>
-              <progress class="progress is-primary" value={bin.fillPercentage} max="100">{bin.fillPercentage}%</progress>
-              <h3 id="binId">{bin.id}</h3>
+              <p>{bin.name || 'NONAME'}</p>
+              <p>Capacity: {bin.capacity || 100} liters</p>
+              <p>Fill Percentage: {bin.fillPercentage || 0}%</p>
+              <progress class="progress is-primary" value={bin.fillPercentage || 0} max="100">{bin.fillPercentage || 0}%</progress>
+              <h3 id="binId">{bin.id || 'NOID'}</h3>
             </div>
           ))
         }
